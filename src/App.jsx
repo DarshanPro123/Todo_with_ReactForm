@@ -14,7 +14,6 @@ function App() {
     register,
     handleSubmit,
     formState: { errors },
-    formState,
     reset,
   } = useForm();
 
@@ -27,12 +26,11 @@ function App() {
       return;
     }
 
-    if (id !== null) {
+    if (id) {
       // Update existing task
       const updatedTasks = tasks.map((t) => (t.id === id ? { id, todo } : t));
       setTasks(updatedTasks);
-      reset();
-      toast.success("Task updated successfully");
+      toast("Task updated successfully");
     } else {
       // Add new task
       setTasks([...tasks, { id: Date.now(), todo }]);
@@ -40,21 +38,12 @@ function App() {
     }
 
     // Reset the form after adding or updating
-    reset(); // Clear input fields after submission
+    reset({ id: null, todo: "" });
   };
 
   const onSubmit = (data) => {
     addOrUpdateTask(data);
   };
-
-  useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      reset({
-        id: null,
-        todo: "",
-      });
-    }
-  }, [formState, reset]);
 
   const handleDelete = (id, todo) => {
     const confirm = window.confirm(
